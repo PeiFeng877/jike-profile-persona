@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jike Profile Persona"
+  short_description: "Fetch Jike posts for persona or dating-fit analysis"
+  default_prompt: "Fetch a Jike profile, build a post corpus, and produce either a vivid personality portrait or a friend-style dating compatibility read grounded in the posts."
