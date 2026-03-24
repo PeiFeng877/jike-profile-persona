@@ -1,6 +1,6 @@
 ---
 name: jike-profile-persona
-description: Fetch recent posts from a Jike/即刻 profile URL or username, handle QR login for web.okjike.com when needed, and generate either an evidence-backed personality portrait or a relationship-fit analysis based on the user's dating preferences. Use when the user provides an 即刻主页链接 and wants posts collected, summarized, profiled, or judged for compatibility.
+description: 获取即刻主页最近动态，处理 web.okjike.com 登录二维码，并生成两类分析结果：基于文本证据的人物侧写，或结合用户择偶偏好的关系适配分析。适用于用户提供即刻主页链接，并希望抓取、总结、画像或判断是否适合接触的场景。
 version: 0.1.0
 metadata:
   openclaw:
@@ -9,100 +9,100 @@ metadata:
         - python3
 ---
 
-# Jike Profile Persona
+# 即刻主页人物分析
 
-## Overview
+## 概览
 
-Run the bundled script to collect up to 200 recent posts from a Jike profile, build a normalized corpus, and generate ready-to-analyze prompt packs.
+运行内置脚本，抓取一个即刻主页最近最多 200 条动态，整理成标准化语料，并生成可直接用于分析的提示词输入文件。
 
-The skill now supports two analysis modes:
-- Base portrait: a vivid, evidence-backed public persona reading
-- Compatibility advice: combine the user's dating preferences with the target's posts and give a friend-style suitability read
+这个 skill 支持两种分析场景：
+- 基础侧写：输出一份有画面感、但有证据的人物画像
+- 关系适配：结合用户自己的择偶要求，给出朋友视角的适配建议
 
-Treat both as text-based inference, not psychological diagnosis and not matchmaking science.
+这两种分析都只是基于文本内容的推断，不是心理诊断，也不是“算姻缘”。
 
-## Workflow
+## 工作流
 
-1. Normalize the input.
-Accept:
+1. 规范化输入。
+支持：
 - `https://m.okjike.com/users/<id>`
 - `https://web.okjike.com/u/<username>`
-- the raw Jike username/id itself
+- 即刻用户名或 id 原文
 
-2. Pick an output directory.
-Default to a task-local directory like `<cwd>/jike-profile-output` unless the user asked for a different location.
+2. 选择输出目录。
+默认使用当前任务目录下的 `<cwd>/jike-profile-output`，除非用户明确指定了别的位置。
 
-3. Run the fetch script.
+3. 运行抓取脚本。
 
 ```bash
 python3 /Users/Icarus/.codex/skills/jike-profile-persona/scripts/jike_profile_persona.py "<profile-url-or-username>" --limit 200 --out-dir "<output-dir>"
 ```
 
-If the user also gave their own ideal-partner preferences, expectations, turn-offs, or relationship concerns, pass them in one of these ways:
+如果用户还提供了自己的理想对象要求、期待、雷点或关系顾虑，就把这些内容一起传给脚本。可选两种方式：
 
 ```bash
-python3 /Users/Icarus/.codex/skills/jike-profile-persona/scripts/jike_profile_persona.py "<profile-url-or-username>" --limit 200 --out-dir "<output-dir>" --match-brief "<user-preferences>"
+python3 /Users/Icarus/.codex/skills/jike-profile-persona/scripts/jike_profile_persona.py "<profile-url-or-username>" --limit 200 --out-dir "<output-dir>" --match-brief "<用户偏好描述>"
 ```
 
-or
+或者：
 
 ```bash
-python3 /Users/Icarus/.codex/skills/jike-profile-persona/scripts/jike_profile_persona.py "<profile-url-or-username>" --limit 200 --out-dir "<output-dir>" --match-brief-file "<absolute-path-to-brief.md>"
+python3 /Users/Icarus/.codex/skills/jike-profile-persona/scripts/jike_profile_persona.py "<profile-url-or-username>" --limit 200 --out-dir "<output-dir>" --match-brief-file "<偏好描述文件的绝对路径>"
 ```
 
-4. Handle login when prompted.
-If the script prints `Login required`, it will generate a QR image file in the output directory.
-Show that file to the user as a local image in the app:
+4. 处理登录。
+如果脚本打印出 `Login required`，说明需要即刻登录态。脚本会在输出目录生成二维码图片。
+在 app 里把这个本地图片展示给用户：
 
 ```markdown
 ![Jike login QR](/absolute/path/to/jike-login-qr.png)
 ```
 
-Tell the user to scan it with the Jike app's built-in scanner. If they say the scan hangs, generate a fresh QR and tell them not to use the system camera or WeChat scanner.
+提醒用户使用即刻 App 内置扫一扫，不要用系统相机或微信扫码。如果用户反馈一直加载中，就生成新的二维码再扫一次。
 
-5. Return the artifacts.
-The script writes:
+5. 返回产物。
+脚本会写出：
 - `<username>.updates.json`
 - `<username>.updates.corpus.md`
 - `<username>.analysis-input.md`
-- `<username>.match-analysis-input.md` when `--match-brief` or `--match-brief-file` is provided
-- `jike-session.json` for cached refresh-token reuse
-- `jike-login-qr.png` only when login is needed
+- `<username>.match-analysis-input.md`：只有在传入 `--match-brief` 或 `--match-brief-file` 时才会生成
+- `jike-session.json`：用于复用 refresh token
+- `jike-login-qr.png`：仅在需要登录时生成
 
-6. Pick the right prompt-pack in-model.
-Use:
-- `<username>.analysis-input.md` for the base portrait
-- `<username>.match-analysis-input.md` for the dating/compatibility scenario
+6. 选择正确的提示词输入文件。
+用：
+- `<username>.analysis-input.md` 做基础人物侧写
+- `<username>.match-analysis-input.md` 做关系适配/择偶判断
 
-Each prompt-pack already contains:
-- the analysis voice and framing
-- the profile metadata
-- the normalized post corpus
-- for the match scenario, the user's own preference brief
+这些输入文件里已经包含：
+- 分析语气和写法约束
+- 主页元信息
+- 标准化后的动态语料
+- 在关系适配场景下，用户自己的偏好描述
 
-Do not fall back to the old regex/template style. The script is only responsible for collection and packaging.
+不要再退回到旧的“正则分类 + 固定模板”思路。脚本负责抓取和打包，最终分析由模型完成。
 
-7. Explain result limits clearly.
-If the report contains fewer than 200 posts, say that the script fetched all currently available profile posts for that account. Do not imply the script stopped early unless there was an actual failure.
+7. 清楚说明样本限制。
+如果结果少于 200 条，要明确告诉用户：当前抓到的就是这个账号此时主页流里可拿到的动态，不要暗示是脚本提前停了，除非确实发生错误。
 
-## Output Rules
+## 输出规则
 
-- Prefer citing the generated corpus or prompt-pack instead of paraphrasing raw data from memory.
-- Keep the explanation evidence-based. Quote or paraphrase specific posts and dates.
-- State that the analysis is a content/persona inference, not a clinical or psychological diagnosis, and not a deterministic matchmaking verdict.
-- If the user wants a tighter or different rubric, follow [analysis-rubric.md](references/analysis-rubric.md).
-- If the user wants to change the voice or sharpness of the portrait, edit [persona-prompt.md](references/persona-prompt.md) rather than changing fetch logic.
-- If the user wants a more playful or harsher compatibility read, edit [compatibility-prompt.md](references/compatibility-prompt.md).
+- 尽量引用生成出来的语料文件或提示词输入文件，不要凭记忆复述。
+- 结论必须有证据，优先引用具体动态片段和日期。
+- 要明确说明：这是内容风格/人物外观层面的推断，不是临床或心理诊断，也不是确定性的婚恋结论。
+- 如果用户想要更严谨或更收敛的分析边界，读取 [analysis-rubric.md](references/analysis-rubric.md)。
+- 如果用户想调整基础侧写的风格、锐度或画面感，改 [persona-prompt.md](references/persona-prompt.md)，不要改抓取逻辑。
+- 如果用户想让关系适配分析更俏皮、更毒舌或更克制，改 [compatibility-prompt.md](references/compatibility-prompt.md)。
 
-## Notes
+## 说明
 
-- The script uses authenticated web APIs after QR login.
-- The current implementation fetches profile updates via the web profile stream and may return fewer than the requested count when the account itself has fewer public profile posts.
-- Reuse `jike-session.json` when present; only re-authenticate when refresh fails.
+- 脚本在扫码登录后，使用即刻 Web 的认证接口抓取数据。
+- 当前实现基于用户主页动态流抓取；如果账号本身主页动态不足 200 条，返回数量会少于请求值。
+- 如果输出目录里已经有 `jike-session.json`，优先复用；只有 refresh 失败时才重新登录。
 
-## Resources
+## 资源
 
-- `scripts/jike_profile_persona.py`: end-to-end fetch, login, corpus generation, and prompt-pack generation
-- `references/analysis-rubric.md`: reporting rubric and guardrails
-- `references/persona-prompt.md`: the main prompt template used for the final portrait
-- `references/compatibility-prompt.md`: the friend-style prompt template for dating-fit advice
+- `scripts/jike_profile_persona.py`：登录、抓取、语料生成、提示词输入文件生成
+- `references/analysis-rubric.md`：分析边界和证据规则
+- `references/persona-prompt.md`：基础人物侧写提示词
+- `references/compatibility-prompt.md`：关系适配提示词

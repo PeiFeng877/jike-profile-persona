@@ -1,71 +1,71 @@
-# Analysis Rubric
+# 分析准则
 
-Use this rubric when generating or revising the Jike profile report.
+生成或修改即刻分析结果时，使用这份准则。
 
-The preferred voice now comes from [persona-prompt.md](persona-prompt.md). Use this rubric as the factual guardrail layer, not as the whole style.
-For the dating-fit scenario, also use [compatibility-prompt.md](compatibility-prompt.md).
+推荐的表达风格以 [persona-prompt.md](persona-prompt.md) 为主，这份文档负责提供事实边界和证据约束。
+如果是关系适配场景，也要一起参考 [compatibility-prompt.md](compatibility-prompt.md)。
 
-## Required Framing
+## 必要前置说明
 
-- Say the report is based on public post content.
-- Say it is a style/persona inference, not a clinical diagnosis.
-- State the actual sample count.
-- Note when the account has fewer posts than requested.
+- 明确说明报告基于公开动态内容。
+- 明确说明这是内容风格/人物外观推断，不是心理诊断。
+- 写明实际样本数。
+- 如果动态少于请求值，要说明账号本身当前可抓到的主页动态就这么多，或者更多内容不在主页流里。
 
-## Core Dimensions
+## 核心维度
 
-Cover these dimensions when the evidence supports them:
+在证据足够时，优先覆盖这些维度：
 
-1. Topic preference
-   Look for repeated themes such as work, products, marketing, AI, relationships, hobbies, or personal reflection.
+1. 主题偏好
+   看是否反复出现工作、产品、营销、AI、关系、兴趣、个人感受等主题。
 
-2. Communication style
-   Distinguish between analytical, narrative, persuasive, promotional, conversational, or reflective writing.
+2. 表达方式
+   区分更偏分析、叙事、说服、宣传、闲聊还是反思。
 
-7. Tension or contrast
-   Prefer at least one interesting contradiction that is grounded in evidence, such as warmth plus distance, ambition plus restraint, or openness plus role-consciousness.
+3. 务实还是抽象
+   看作者更关注执行、战术、结果、操盘，还是更关注观念、审美、价值和判断。
 
-3. Practical vs abstract orientation
-   Note whether the author focuses on execution, tactics, outcomes, and operators, or on ideas, aesthetics, and values.
+4. 自我暴露程度
+   看作者是否会展示情绪、私生活、不确定感和脆弱，还是基本只以角色身份对外表达。
 
-4. Self-disclosure level
-   Note whether the author exposes emotions, private life, uncertainty, or vulnerability, or stays mostly role-based and external.
+5. 社交姿态
+   看是否会主动邀请、合作、给建议、强调群体身份，还是更偏展示和广播。
 
-5. Social stance
-   Look for invitation, collaboration, advice-giving, group identity, or performative broadcasting.
+6. 商业导向
+   留意销售、招聘、咨询、产品定位、增长、转化等反复出现的商业信号。
 
-6. Commercial orientation
-   Call out repeated signals of sales, recruiting, consulting, product positioning, or growth language.
+7. 反差感
+   尽量指出至少一个有意思但有证据支撑的矛盾点，比如热情但边界清楚、野心明显但表达克制、开放但角色意识很强。
 
-## Evidence Rules
+## 证据规则
 
-- Support each major conclusion with concrete post snippets and dates.
-- Prefer 2-3 examples per major trait.
-- Avoid overstating certainty from weak evidence.
-- If a trait is ambiguous, say so.
-- Interesting phrasing is welcome, but not at the cost of traceability.
+- 每个主要判断都要有具体动态片段和日期支撑。
+- 每个主要特征尽量给出 2 到 3 个例子。
+- 证据弱时不要说得像铁证。
+- 如果某个特征拿不准，就直接说模糊或不足以判断。
+- 写法可以有趣，但不能牺牲可追溯性。
 
-## Recommended Structure
+## 推荐结构
 
-Use this shape unless the user asks for something else:
+默认建议用这个结构，除非用户另有要求：
 
-1. Short summary
-2. Personality/style traits
-3. Evidence snippets
-4. Risk or confidence notes
+1. 简短总结
+2. 主要性格/风格特征
+3. 证据摘录
+4. 置信度和风险提示
 
-For compatibility requests, adapt the structure to:
+如果是关系适配请求，优先改成：
 
-1. Suitability takeaway
-2. Attraction points
-3. Friction points
-4. Advice and blind spots
+1. 适配结论
+2. 吸引点
+3. 摩擦点
+4. 建议与盲区
 
-## Red Flags
+## 红线
 
-Avoid:
+避免：
 
-- psychiatric labels
-- moral judgments
-- fake certainty
-- claims that exceed the visible data
+- 病理化或精神医学标签
+- 道德审判
+- 假装非常确定
+- 做出超出可见文本证据的结论
